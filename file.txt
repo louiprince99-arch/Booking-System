@@ -1,3 +1,0 @@
-index.html
-css/    (with styles.css)
-js/     (with several .js files)
