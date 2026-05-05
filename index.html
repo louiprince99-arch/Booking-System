@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Office Booking Platform</title>
+
+  <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css" />
   <link
     rel="stylesheet"
@@ -40,19 +42,29 @@
     </div>
   </div>
 
-  <!-- Main App -->
+  <!-- Main Application -->
   <div id="mainApp" class="screen">
     <nav class="sidebar">
       <div class="sidebar-header">
         <i class="fas fa-building"></i>
         <span>Office Space</span>
       </div>
+
       <ul class="nav-menu">
-        <li class="nav-item active" data-tab="desks"><i class="fas fa-chair"></i><span>Desks</span></li>
-        <li class="nav-item" data-tab="meeting-rooms"><i class="fas fa-users"></i><span>Meeting Rooms</span></li>
-        <li class="nav-item" data-tab="my-bookings"><i class="fas fa-calendar-check"></i><span>My Bookings</span></li>
-        <li class="nav-item admin-only" data-tab="admin"><i class="fas fa-cog"></i><span>Admin Portal</span></li>
+        <li class="nav-item active" data-tab="desks">
+          <i class="fas fa-chair"></i><span>Desks</span>
+        </li>
+        <li class="nav-item" data-tab="meeting-rooms">
+          <i class="fas fa-users"></i><span>Meeting Rooms</span>
+        </li>
+        <li class="nav-item" data-tab="my-bookings">
+          <i class="fas fa-calendar-check"></i><span>My Bookings</span>
+        </li>
+        <li class="nav-item admin-only" data-tab="admin">
+          <i class="fas fa-cog"></i><span>Admin Portal</span>
+        </li>
       </ul>
+
       <div class="sidebar-footer">
         <div class="user-info">
           <div class="user-avatar" id="userAvatar">JD</div>
@@ -61,11 +73,20 @@
             <span id="userRole" class="role-badge">User</span>
           </div>
         </div>
-        <button class="btn-icon" onclick="logout()" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+        <button class="btn-icon" onclick="logout()" title="Logout">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
       </div>
     </nav>
 
     <main class="main-content">
+      <!-- Top bar logout (visible even if sidebar is collapsed) -->
+      <div style="display:flex;justify-content:flex-end;margin-bottom:1rem;">
+        <button class="btn btn-outline btn-small" onclick="logout()">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+
       <div id="desksTab" class="tab-content active">
         <div class="content-header">
           <h2>Desk Booking</h2>
@@ -73,10 +94,12 @@
             <input type="date" id="deskDate" class="date-input" />
           </div>
         </div>
+
         <div class="floor-selector">
           <label>Select Floor:</label>
           <select id="deskFloorSelect" class="select-input"></select>
         </div>
+
         <div class="map-container">
           <div id="deskMapWrapper" class="map-wrapper">
             <div class="map-canvas" id="deskMapCanvas">
@@ -89,6 +112,7 @@
     </main>
   </div>
 
+  <!-- JavaScript -->
   <script src="js/data.js"></script>
   <script src="js/auth.js"></script>
   <script src="js/booking.js"></script>
@@ -97,3 +121,4 @@
   <script src="js/app.js"></script>
 </body>
 </html>
+
