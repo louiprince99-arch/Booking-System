@@ -1,67 +1,82 @@
 // js/data.js - Data management with localStorage persistence
 
 const DataStore = {
-    // Default data
     defaults: {
         users: [
             { id: 1, name: 'Admin User', email: 'admin@company.com', password: 'admin', role: 'admin' },
-            { id: 2, name: 'John Doe', email: 'john@company.com', password: 'user', role: 'user' },
-            { id: 3, name: 'Jane Smith', email: 'jane@company.com', password: 'user', role: 'user' }
+            { id: 2, name: 'John Doe',   email: 'john@company.com',  password: 'user',  role: 'user'  },
+            { id: 3, name: 'Jane Smith', email: 'jane@company.com',  password: 'user',  role: 'user'  }
         ],
         floors: [
-            { 
-                id: 1, 
-                name: 'Ground Floor', 
-                number: 0, 
+            {
+                id: 1,
+                name: 'Ground Floor',
+                number: 0,
+                // Will be replaced when admin uploads the real floor map image
                 mapImage: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PHJlY3QgeD0iNTAiIHk9IjUwIiB3aWR0aD0iNzAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZTVlN2ViIiBzdHJva2Utd2lkdGg9IjIiLz48dGV4dCB4PSI0MDAiIHk9IjMwMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzljYTNhZiIgZm9udC1zaXplPSIyNCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiPkdyb3VuZCBGbG9vciBNYXA8L3RleHQ+PC9zdmc+'
-            },
-            { 
-                id: 2, 
-                name: 'First Floor', 
-                number: 1, 
-                mapImage: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAwIiBoZWlnaHQ9IjYwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PHJlY3QgeD0iNTAiIHk9IjUwIiB3aWR0aD0iNzAwIiBoZWlnaHQ9IjUwMCIgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZTVlN2ViIiBzdHJva2Utd2lkdGg9IjIiLz48dGV4dCB4PSI0MDAiIHk9IjMwMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzljYTNhZiIgZm9udC1zaXplPSIyNCIgZm9udC1mYW1pbHk9InNhbnMtc2VyaWYiPkZpcnN0IEZsb29yIE1hcDwvdGV4dD48L3N2Zz4='
             }
         ],
+
+        // ─────────────────────────────────────────────────────────────────
+        // Desk positions calibrated to the uploaded office floor plan image.
+        //
+        // The open workspace has 4 pods of 4 desks each (2×2 grid per pod):
+        //
+        //   Pod A (desks  1– 4)  top-left  cluster  ≈ 35–44% x,  38–49% y
+        //   Pod B (desks  5– 8)  top-right cluster  ≈ 56–65% x,  38–49% y
+        //   Pod C (desks  9–12)  bot-left  cluster  ≈ 35–44% x,  57–68% y
+        //   Pod D (desks 13–16)  bot-right cluster  ≈ 56–65% x,  57–68% y
+        //
+        // Each pod cell is ~4.5% wide and ~4.5% tall.
+        // Numbers in each cell: top-left, top-right, bottom-left, bottom-right
+        // ─────────────────────────────────────────────────────────────────
         desks: [
-            { id: 1, name: 'D-001', floorId: 1, x: 15, y: 20 },
-            { id: 2, name: 'D-002', floorId: 1, x: 25, y: 20 },
-            { id: 3, name: 'D-003', floorId: 1, x: 35, y: 20 },
-            { id: 4, name: 'D-004', floorId: 1, x: 15, y: 40 },
-            { id: 5, name: 'D-005', floorId: 1, x: 25, y: 40 },
-            { id: 6, name: 'D-006', floorId: 1, x: 35, y: 40 },
-            { id: 7, name: 'D-101', floorId: 2, x: 15, y: 25 },
-            { id: 8, name: 'D-102', floorId: 2, x: 25, y: 25 },
-            { id: 9, name: 'D-103', floorId: 2, x: 35, y: 25 },
-            { id: 10, name: 'D-104', floorId: 2, x: 45, y: 25 }
+            // ── Pod A ──
+            { id:  1, name: 'Desk 1',  floorId: 1, x: 36.5, y: 40.0 },
+            { id:  2, name: 'Desk 2',  floorId: 1, x: 41.5, y: 40.0 },
+            { id:  3, name: 'Desk 3',  floorId: 1, x: 36.5, y: 46.0 },
+            { id:  4, name: 'Desk 4',  floorId: 1, x: 41.5, y: 46.0 },
+            // ── Pod B ──
+            { id:  5, name: 'Desk 5',  floorId: 1, x: 57.5, y: 40.0 },
+            { id:  6, name: 'Desk 6',  floorId: 1, x: 62.5, y: 40.0 },
+            { id:  7, name: 'Desk 7',  floorId: 1, x: 57.5, y: 46.0 },
+            { id:  8, name: 'Desk 8',  floorId: 1, x: 62.5, y: 46.0 },
+            // ── Pod C ──
+            { id:  9, name: 'Desk 9',  floorId: 1, x: 36.5, y: 59.0 },
+            { id: 10, name: 'Desk 10', floorId: 1, x: 41.5, y: 59.0 },
+            { id: 11, name: 'Desk 11', floorId: 1, x: 36.5, y: 65.0 },
+            { id: 12, name: 'Desk 12', floorId: 1, x: 41.5, y: 65.0 },
+            // ── Pod D ──
+            { id: 13, name: 'Desk 13', floorId: 1, x: 57.5, y: 59.0 },
+            { id: 14, name: 'Desk 14', floorId: 1, x: 62.5, y: 59.0 },
+            { id: 15, name: 'Desk 15', floorId: 1, x: 57.5, y: 65.0 },
+            { id: 16, name: 'Desk 16', floorId: 1, x: 62.5, y: 65.0 }
         ],
+
         meetingRooms: [
-            { id: 1, name: 'Conference Room A', floorId: 1, capacity: 10, equipment: [1, 2, 3] },
-            { id: 2, name: 'Huddle Space 1', floorId: 1, capacity: 4, equipment: [2] },
-            { id: 3, name: 'Board Room', floorId: 2, capacity: 16, equipment: [1, 2, 3, 4, 5] },
-            { id: 4, name: 'Meeting Room B', floorId: 2, capacity: 8, equipment: [1, 2] }
+            { id: 1, name: 'Conference Room', floorId: 1, capacity: 10, equipment: [1, 2, 3] },
+            { id: 2, name: 'Meeting Room 1',  floorId: 1, capacity: 6,  equipment: [1, 2]    },
+            { id: 3, name: 'Meeting Room 2',  floorId: 1, capacity: 6,  equipment: [2, 3]    }
         ],
+
         equipment: [
-            { id: 1, name: 'Projector', icon: 'fa-tv' },
-            { id: 2, name: 'Whiteboard', icon: 'fa-chalkboard' },
-            { id: 3, name: 'Video Conference', icon: 'fa-video' },
-            { id: 4, name: 'Conference Phone', icon: 'fa-phone' },
-            { id: 5, name: 'Display Screen', icon: 'fa-desktop' }
+            { id: 1, name: 'Projector',         icon: 'fa-tv'          },
+            { id: 2, name: 'Whiteboard',         icon: 'fa-chalkboard'  },
+            { id: 3, name: 'Video Conference',   icon: 'fa-video'       },
+            { id: 4, name: 'Conference Phone',   icon: 'fa-phone'       },
+            { id: 5, name: 'Display Screen',     icon: 'fa-desktop'     }
         ],
-        deskBookings: [],
+
+        deskBookings:    [],
         meetingBookings: []
     },
 
-    // Initialize data store
     init() {
-        // Load data from localStorage or use defaults
-        const storedData = localStorage.getItem('officeBookingData');
-        if (storedData) {
-            this.data = JSON.parse(storedData);
-            // Ensure all collections exist
+        const stored = localStorage.getItem('officeBookingData');
+        if (stored) {
+            this.data = JSON.parse(stored);
             Object.keys(this.defaults).forEach(key => {
-                if (!this.data[key]) {
-                    this.data[key] = this.defaults[key];
-                }
+                if (!this.data[key]) this.data[key] = this.defaults[key];
             });
         } else {
             this.data = JSON.parse(JSON.stringify(this.defaults));
@@ -69,100 +84,84 @@ const DataStore = {
         this.save();
     },
 
-    // Save to localStorage
-    save() {
-        localStorage.setItem('officeBookingData', JSON.stringify(this.data));
-    },
+    save()  { localStorage.setItem('officeBookingData', JSON.stringify(this.data)); },
+    reset() { this.data = JSON.parse(JSON.stringify(this.defaults)); this.save(); },
 
-    // Reset to defaults
-    reset() {
-        this.data = JSON.parse(JSON.stringify(this.defaults));
-        this.save();
-    },
+    getAll(col)           { return this.data[col] || []; },
+    getById(col, id)      { return this.data[col]?.find(i => i.id === id); },
 
-    // Generic CRUD operations
-    getAll(collection) {
-        return this.data[collection] || [];
-    },
-
-    getById(collection, id) {
-        return this.data[collection]?.find(item => item.id === id);
-    },
-
-    add(collection, item) {
-        const maxId = Math.max(0, ...this.data[collection].map(i => i.id));
+    add(col, item) {
+        const maxId = Math.max(0, ...this.data[col].map(i => i.id));
         item.id = maxId + 1;
-        this.data[collection].push(item);
+        this.data[col].push(item);
         this.save();
         return item;
     },
 
-    update(collection, id, updates) {
-        const index = this.data[collection].findIndex(item => item.id === id);
-        if (index !== -1) {
-            this.data[collection][index] = { ...this.data[collection][index], ...updates };
+    update(col, id, updates) {
+        const idx = this.data[col].findIndex(i => i.id === id);
+        if (idx !== -1) {
+            this.data[col][idx] = { ...this.data[col][idx], ...updates };
             this.save();
-            return this.data[collection][index];
+            return this.data[col][idx];
         }
         return null;
     },
 
-    delete(collection, id) {
-        const index = this.data[collection].findIndex(item => item.id === id);
-        if (index !== -1) {
-            this.data[collection].splice(index, 1);
-            this.save();
-            return true;
-        }
+    delete(col, id) {
+        const idx = this.data[col].findIndex(i => i.id === id);
+        if (idx !== -1) { this.data[col].splice(idx, 1); this.save(); return true; }
         return false;
     },
 
-    // Specific queries
-    getDesksByFloor(floorId) {
-        return this.data.desks.filter(desk => desk.floorId === floorId);
+    getDesksByFloor(floorId)  { return this.data.desks.filter(d => d.floorId === floorId); },
+    getRoomsByFloor(floorId)  { return this.data.meetingRooms.filter(r => r.floorId === floorId); },
+
+    getDeskBooking(deskId, date, timeSlot) {
+        return this.data.deskBookings.find(b =>
+            b.deskId === deskId &&
+            b.date === date &&
+            (b.fullDay || b.timeSlot === timeSlot || timeSlot === undefined)
+        );
     },
 
-    getRoomsByFloor(floorId) {
-        return this.data.meetingRooms.filter(room => room.floorId === floorId);
+    // Return all bookings for a desk on a date (can be multiple time-slot bookings)
+    getDeskBookingsForDate(deskId, date) {
+        return this.data.deskBookings.filter(b => b.deskId === deskId && b.date === date);
     },
 
-    getDeskBookingsForDate(date) {
-        return this.data.deskBookings.filter(booking => booking.date === date);
+    isDeskFullyBooked(deskId, date) {
+        return this.data.deskBookings.some(b => b.deskId === deskId && b.date === date && b.fullDay);
     },
 
-    getMeetingBookingsForDate(date) {
-        return this.data.meetingBookings.filter(booking => booking.date === date);
+    isDeskSlotBooked(deskId, date, timeSlot) {
+        return this.data.deskBookings.some(b =>
+            b.deskId === deskId &&
+            b.date === date &&
+            (b.fullDay || b.timeSlot === timeSlot)
+        );
     },
 
     getUserBookings(userId) {
         return {
-            desks: this.data.deskBookings.filter(b => b.userId === userId),
+            desks:    this.data.deskBookings.filter(b => b.userId === userId),
             meetings: this.data.meetingBookings.filter(b => b.userId === userId)
         };
     },
 
-    isDeskBooked(deskId, date) {
-        return this.data.deskBookings.some(b => b.deskId === deskId && b.date === date);
-    },
-
-    getDeskBooking(deskId, date) {
-        return this.data.deskBookings.find(b => b.deskId === deskId && b.date === date);
+    getRoomBookingsForDate(roomId, date) {
+        return this.data.meetingBookings.filter(b => b.roomId === roomId && b.date === date);
     },
 
     isTimeSlotBooked(roomId, date, startTime, endTime) {
-        return this.data.meetingBookings.some(b => 
-            b.roomId === roomId && 
-            b.date === date && 
+        return this.data.meetingBookings.some(b =>
+            b.roomId === roomId &&
+            b.date === date &&
             ((startTime >= b.startTime && startTime < b.endTime) ||
-             (endTime > b.startTime && endTime <= b.endTime) ||
+             (endTime > b.startTime   && endTime <= b.endTime)   ||
              (startTime <= b.startTime && endTime >= b.endTime))
         );
-    },
-
-    getRoomBookingsForDate(roomId, date) {
-        return this.data.meetingBookings.filter(b => b.roomId === roomId && b.date === date);
     }
 };
 
-// Initialize on load
 DataStore.init();
